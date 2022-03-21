@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Document</title>
+</head>
+<body>
+    {foreach $arr as $k=>$v}
+    <div>
+        {$k}---
+        ID：{$v['id']}
+        姓名：{$v['name']}
+    </div>
+    {/foreach}
+
+    {volist name='arr' id='a' offset='1' length='1'}
+        <div>
+            {$i}--- ID：{$a['id']}  姓名：{$a['name']}
+        </div>
+    {/volist}
+</body>
+</html>

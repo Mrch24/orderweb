@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户点菜</title>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <style type="text/css">
+        .header{width:100%;height: 50px;line-height: 50px;background: #03213b;color:#ffffff;}
+        .title{margin-left: 20px;font-size: 20px;}
+        .userinfo{float: right;margin-right: 10px;}
+        .userinfo a{color:#ffffff;}
+        .menu{width: 200px;background:#393d47;position:absolute;}
+        .main{position: absolute;left:200px;right:0px;}
+
+        .layui-collapse{border: none;}
+        .layui-colla-item{border-top:none;}
+        .layui-colla-title{background:#42485b;color:#ffffff;}
+        .layui-colla-content{border-top:none;padding:0px;}
+
+        .content span{background: #009688;margin-left: 30px;padding: 10px;color:#ffffff;}
+        .content div{border-bottom: solid 2px #009688;margin-top: 8px;}
+        .content button{float: right;margin-top: -5px;}
+    </style>
+</head>
+<body>
+    
+    
+    <div class="header">
+        <span class="title"><span style="font-size: 20px;">{$title}</span>--自助点菜系统 欢迎您！</span>
+        
+        <span class="userinfo"> 
+        <a href = "/index.php/index/login">
+            <button class="layui-btn layui-btn-sm">登陆</button>
+        </a>
+        <a href = "/index.php/index/register">
+            <button class="layui-btn layui-btn-sm">注册</button>
+        </a>
+            【{$login}】
+        <a href = "/index.php/index/exsit">
+            <button class="layui-btn layui-btn-sm">退出</button>
+        </a>
+        </span>
+    </div>
+    
+    
+    <div class="menu" id="menu">
+        <div class="layui-collapse" lay-accordion>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">{$left[0]['title']}</h2>
+                <div class="layui-colla-content layui-show">
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                        <li class="layui-nav-item"><a href="/index.php/index/index">{$left.0.lists.0.title}</a></li>
+                        <li class="layui-nav-item"><a href="/index.php/index/shopcar">{$left.0.lists.1.title}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">{$left[1]['title']}</h2>
+                <div class="layui-colla-content layui-show">
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                        <li class="layui-nav-item"><a href="/index.php/index/orders">{$left.1.lists.0.title}</a></li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+    </div>
+   
+    
+    <div class="main" style="padding:10px;">
+        <div class="content">
+            <span>购物车列表</span>
+            <div></div>
+        </div>
+    
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>菜品ID</th>
+                    <th>顾客ID</th>
+                    <th>菜品名称</th>
+                    <th>菜品价格</th>  
+                    <th>操作</th>                                  
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="right" id="right_v"}
+                
+                <tr>                    
+                    <td>{$right_v.id}</td>
+                    <td>{$right_v.u_id}</td>
+                    <td>{$right_v.name}</td>
+                    <td>{$right_v.price}</td>
+                    <td>
+                        <button class="layui-btn layui-btn-xs" onclick="del_car({$right_v.iid})">移出购物车</button>
+                    </td>             
+                </tr>
+                {/volist}
+            </tbody>            
+        </table>
+        <button class="layui-btn layui-btn-xs" onclick="settle()">提交订单</button>
+        
+    </div>
+    
+</body>
+</html>
+
+
+<script>
+    layui.use(['element','layer','laypage','layedit'], function(){
+        var element = layui.element;
+        var laypage = layui.laypage;
+        $ = layui.jquery;
+        layer = layui.layer;
+        resetMenuHeight();
+    });
+    // 重新设置菜单容器高度
+    function resetMenuHeight(){
+        var height = document.documentElement.clientHeight - 50;
+        $('#menu').height(height);
+    }
+</script>
+<script type="text/javascript">
+    
+    function del_car(id){
+        layer.confirm('确定要移出购物车吗？', {
+            icon:3,
+            btn: ['确定','取消']
+        }, function(){
+            $.post('/index.php/index/del_car',{'id':id},function(res){
+                if(res.code>0){
+                    layer.alert(res.msg,{icon:2});
+                }else{
+                    layer.msg(res.msg);
+                    setTimeout(function(){window.location.reload();},1000);
+                }
+            },'json');
+        });
+    }
+
+    function settle(){
+        layer.confirm('您确定要提交订单吗？', {
+            icon:3,
+            btn: ['确定','取消']
+        }, function(){
+            $.post('/index.php/index/settle'
+            ,function(res){
+                if(res.code>0){
+                    layer.alert(res.msg,{icon:2});
+                }else{
+                    layer.msg(res.msg);
+                    setTimeout(function(){window.location.reload();},1000);
+                }
+            },'json'
+            );
+        });
+    }
+
+</script>

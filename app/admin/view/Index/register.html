@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>注册页</title>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+</head>
+<body style="padding:10px;">
+    <form action="/index.php/index/register" class="layui-form" method="POST">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="a_id" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="a_password" value="">
+            </div>
+        </div>  
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="submit" >注册</button>
+            </div> 
+        </div>         
+    </form>
+    
+    <script type="text/javascript">
+        layui.use(['layer','form'],function(){
+            form = layui.form;
+            layer = layui.layer;
+            $ = layui.jquery;
+        });
+        
+    </script>
+</body>
+</html>

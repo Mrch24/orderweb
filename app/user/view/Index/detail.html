@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>菜单详情</title>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>    
+</head>
+<body>
+    <div class="main" style="padding:10px;">    
+        <table class="layui-table">
+            <thead>
+                <tr>                    
+                    <th>菜品名称</th>
+                    <th>菜品价格</th>                                                        
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="right" id="right_v"}                
+                <tr>
+                    <td>{$right_v.name}</td>
+                    <td>{$right_v.price}</td>                                 
+                </tr>
+                {/volist}
+            </tbody>            
+        </table>
+    </div>
+    
+</body>
+</html>
+
+
+<script>
+    layui.use(['element','layer','laypage','layedit'], function(){
+        var element = layui.element;
+        var laypage = layui.laypage;
+        $ = layui.jquery;
+        layer = layui.layer;
+        resetMenuHeight();
+    });
+    // 重新设置菜单容器高度
+    function resetMenuHeight(){
+        var height = document.documentElement.clientHeight - 50;
+        $('#menu').height(height);
+    }
+</script>
+<script type="text/javascript">
+</script>

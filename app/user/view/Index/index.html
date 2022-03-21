@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户点菜</title>
+    <link rel="stylesheet" type="text/css" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <style type="text/css">
+        .header{width:100%;height: 50px;line-height: 50px;background: #03213b;color:#ffffff;}
+        .title{margin-left: 20px;font-size: 20px;}
+        .userinfo{float: right;margin-right: 10px;}
+        .userinfo a{color:#ffffff;}
+        .menu{width: 200px;background:#393d47;position:absolute;}
+        .main{position: absolute;left:200px;right:0px;}
+
+        .layui-collapse{border: none;}
+        .layui-colla-item{border-top:none;}
+        .layui-colla-title{background:#42485b;color:#ffffff;}
+        .layui-colla-content{border-top:none;padding:0px;}
+
+        .content span{background: #009688;margin-left: 30px;padding: 10px;color:#ffffff;}
+        .content div{border-bottom: solid 2px #009688;margin-top: 8px;}
+        .content button{float: right;margin-top: -5px;}
+    </style>
+</head>
+<body>
+    
+    
+    <div class="header">
+        <span class="title"><span style="font-size: 20px;">{$title}</span>--自助点菜系统 欢迎您！</span>
+        
+        <span class="userinfo"> 
+        <a href = "/index.php/index/login">
+            <button class="layui-btn layui-btn-sm">登陆</button>
+        </a>
+        <a href = "/index.php/index/register">
+            <button class="layui-btn layui-btn-sm">注册</button>
+        </a>
+            【{$login}】
+        <a href = "/index.php/index/exsit">
+            <button class="layui-btn layui-btn-sm">退出</button>
+        </a>
+        </span>
+    </div>
+    
+    
+    <div class="menu" id="menu">
+        <div class="layui-collapse" lay-accordion>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">{$left[0]['title']}</h2>
+                <div class="layui-colla-content layui-show">
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                        <li class="layui-nav-item"><a href="/index.php/index/index">{$left.0.lists.0.title}</a></li>
+                        <li class="layui-nav-item"><a href="/index.php/index/shopcar">{$left.0.lists.1.title}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">{$left[1]['title']}</h2>
+                <div class="layui-colla-content layui-show">
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                        <li class="layui-nav-item"><a href="/index.php/index/orders">{$left.1.lists.0.title}</a></li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+    </div>
+   
+    
+    <div class="main" style="padding:10px;">
+        <div class="content">
+            <span>菜品列表</span>
+            
+            <div></div>
+        </div>
+        <form class="layui-form" method="post">
+            <div class="layui-form-item" style="margin-top:10px;">
+                <div class="layui-input-inline">
+                    <select name="cat">
+                        <option value="0" {if $cat==0}selected{/if}>全部</option>
+                        <option value="1" {if $cat==1}selected{/if}>特色菜</option>
+                        <option value="2" {if $cat==2}selected{/if}>饮料</option>
+                        <option value="3" {if $cat==3}selected{/if}>烧烤</option>
+                        <option value="4" {if $cat==4}selected{/if}>凉菜</option>
+                        <option value="5" {if $cat==5}selected{/if}>热菜</option>
+                        <option value="6" {if $cat==6}selected{/if}>小吃</option>
+                        <option value="7" {if $cat==7}selected{/if}>主食</option>
+                    </select>
+                </div>
+                <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i>搜索</button>
+            </div>
+        </form>
+    
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>分类</th>
+                    <th>名称</th>
+                    <th>原价</th>
+                    <th>现价</th>
+                    <th>操作</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="right" id="right_v"}
+                
+                <tr>                    
+                    <td>{$right_v.id}</td>
+                    <td>{$right_v.cat}</td>
+                    <td>{$right_v.title}</td>
+                    <td>{$right_v.price}</td>
+                    <td>{$right_v.price_now}</td> 
+                    <td>
+                        <button class="layui-btn layui-btn-xs" onclick="add({$right_v.id}, '{$login}')">加入购物车</button>
+                    </td>             
+                </tr>
+
+                {/volist}
+            </tbody>            
+        </table>
+        <div class="layui-box layui-laypage layui-laypage-default">
+                <a href="/index.php/Index/index?p={$p-1}&cat={$cat}" class="layui-laypage-prev {if $p<=1}layui-disabled{/if}">上一页</a>
+                {for start="0" end="$count"}
+                    {if $p == $i+1}
+                        <span class="layui-laypage-curr">
+                            <em class="layui-laypage-em"></em>
+                            <em>{$i+1}</em>
+                        </span>
+                    {else/}
+                        <a href="/index.php/Index/index?p={$i+1}&cat={$cat}">{$i+1}</a>
+                    {/if}
+                {/for}
+                <a href="/index.php/Index/index?p={$p+1}&cat={$cat}" class="layui-laypage-next {if $p>=$count}layui-disabled{/if}">下一页</a>
+            </div>
+    </div>
+    
+</body>
+</html>
+
+
+<script>
+    layui.use(['element','layer','laypage','layedit'], function(){
+        var element = layui.element;
+        var laypage = layui.laypage;
+        $ = layui.jquery;
+        layer = layui.layer;
+        resetMenuHeight();
+    });
+    // 重新设置菜单容器高度
+    function resetMenuHeight(){
+        var height = document.documentElement.clientHeight - 50;
+        $('#menu').height(height);
+    }
+</script>
+<script type="text/javascript">  
+
+    function add(id, uid){
+        layer.confirm('确定要添加吗？', {
+            icon:3,
+            btn: ['确定','取消']
+        }, function(){
+            $.post('/index.php/index/add',{'id':id, 'uid': uid},function(res){
+                if(res.code>0){
+                    layer.alert(res.msg,{icon:2});
+                }else{
+                    layer.msg(res.msg);
+                    //setTimeout(function(){window.location.reload();},1000);
+                }
+            },'json');
+        });
+    }
+
+</script>
